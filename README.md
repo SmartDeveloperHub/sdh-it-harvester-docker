@@ -12,6 +12,16 @@ The first step consists in building the image defined by `Dockerfile` in the rep
 docker build -t sdh/it-harvester .
 ```
 
+If the *IT Harvester Frontend* distribution relies on a local data-based consumer, it will require a local data file to run. This file can be added to the image, so that it will always use the same, or it might be bound at runtime (see example in the following section).
+In order to include the file as part of the image, it will be necessary to edit the `Dockerfile` configuration, and add a couple of lines:
+
+```bash
+ENV LOCAL_DATA=$HARVESTER_HOME/data/local-data.json
+COPY files/local-data.json $HARVESTER_HOME/data/local-data.json
+```
+
+The first line specifies the required environment variable that points to the local data file. The second line copies the local data file from the host to its expected location within the container.
+
 ### Running the container
 
 In order to run the *IT Harvester Frontend* it is necessary to define several environment variables:
@@ -23,16 +33,22 @@ http://collector.ith.smartdeveloperhub.org:8080/api)
 
 * __HTTP_PORT__: the port to be used by the *IT Harvester Frontend*. This port will have to be exposed by the container. 
 
-Taking all of this into account a container could be executed as follows:
+* __LOCAL_DATA__: the path of a file with local data if the *IT Harvester Frontend* to be run uses a local data-based backend. This file may be directly included in the image (see previous section), or made it available at runtime by mounting a host directory in the container (see example below).
+
+Taking all of this into account a container which reuses an external data file could be executed as follows:
 
 ```bash
 docker run -e "TARGET=http://collector.ith.smartdeveloperhub.org:8080/api" \ 
            -e "HTTP_PORT=8088" \
            -e "HTTP_HOST=frontend.ith.smartdeveloperhub.org" \
+           -e "LOCAL_DATA=/opt/it-harvester/data/local-data.json" \
+           -v $(pwd)/files/local-data.json:/opt/it-harvester/data/local-data.json \
            -p 8088:8088 \
            --name sdh-it-harvester 
            sdh/it-harvester
 ```
+
+In the example above, the external data file should be located in the `files/local-data.json` directory of the current working directory, and is made available in the container at `/opt/it-harvester/data/local-data.json`, which is exactly the path that the Frontend will use at runtime.
 
 ## License
 
