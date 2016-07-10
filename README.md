@@ -393,7 +393,7 @@ Local data files include data for each one of the entities returned by the Jira 
 }
 ```
 
-Example local data files can be created using the *Project Data Generator* available in [Sonatype's OSS Nexus Repository](https://oss.sonatype.org/content/repositories/snapshots/org/smartdeveloperhub/harvesters/it/frontend/it-frontend-dist/0.1.0-SNAPSHOT/it-frontend-dist-0.1.0-20160708.111228-31-generator.zip).
+Example local data files can be created using the *Project Data Generator* available in [Sonatype's OSS Nexus Repository](https://oss.sonatype.org/content/repositories/snapshots/org/smartdeveloperhub/harvesters/it/frontend/it-frontend-dist/0.1.0-SNAPSHOT/it-frontend-dist-0.1.0-20160710.164045-32-generator.zip).
 
 The generator requires Java 7 to be available in the path. Once unzipped, for example in folder 'generator', the generator can be run like this:
 
