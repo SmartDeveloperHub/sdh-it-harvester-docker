@@ -30,8 +30,7 @@ In order to run the *IT Harvester Frontend* it is necessary to define several en
 
 * __HTTP_PORT__: the port to be used by the *IT Harvester Frontend*. This port will have to be exposed by the container. 
 
-* __TARGET__: the Jira Collector endpoint to be used by the *IT Harvester Frontend*. The endpoint can be specified using an IP address (*i.e.*, http://192.168.1.33:8080/api) or a fully qualified domain name (*i.e.*,
-http://collector.ith.smartdeveloperhub.org:8080/api). This parameter is required regardless the *BACKEND_FACTORY* specified.
+* __TARGET__: the Jira Collector endpoint to be used by the *IT Harvester Frontend*. The endpoint can be specified using an IP address (*e.g.*, http://192.168.1.33:8080/api) or a fully qualified domain name (*e.g.*, http://collector.ith.smartdeveloperhub.org:8080/api). This parameter is required regardless the *BACKEND_FACTORY* specified.
 
 * __BACKEND_FACTORY [OPTIONAL]:__ the class name of the BackendControllerFactory to use for creating the backend that the *IT Harvester Frontend* will use for retrieving the data. The first version of the *IT Harvester Frontend* includes to candidates:
   * *org.smartdeveloperhub.harvesters.it.frontend.controller.RemoteBackendControllerFactory*: the factory will create a controller that will use the Jira Collector Remote REST API to retrieve data from the collector endpoint specified using the *TARGET* environment variable.
