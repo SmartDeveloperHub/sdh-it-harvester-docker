@@ -54,11 +54,11 @@ docker run -e "HTTP_HOST=frontend.ith.smartdeveloperhub.org" \
            sdh/it-harvester
 ```
 
-In the example above, the external data file should be located in the `files/local-data.json` directory of the current working directory, and is made available in the container at `/opt/it-harvester/data/local-data.json`, which is exactly the path that the Frontend will use at runtime.
+In the example above, the external data file should be located in the `files/local-data.json` directory of the current working directory, and is made available in the container at `/opt/it-harvester/data/local-data.json`, which is exactly the path that the *IT Harvester Frontend* will use at runtime.
 
 ### Creating local data files
 
-Local data files include data for each one of the entities returned by the Jira Collector REST API, that is: *contributors*, *commits*, *projects*, *components*, *versions*, and *issues*. Contributors, commits, and projects are stored in *arrays*, whereas components, versions, and issues are stored in *arrays indexed* by __project identifier__. In particular, local data files must conform to the following *JSON Schema* ([see here](https://tools.ietf.org/html/draft-zyp-json-schema-04)):
+Local data files include data for each one of the entities returned by the *REST API* of the __IT Collector__, that is: *contributors*, *commits*, *projects*, *components*, *versions*, and *issues*. Contributors, commits, and projects are stored in *arrays*, whereas components, versions, and issues are stored in *arrays indexed* by __project identifier__. In particular, local data files must conform to the following *JSON Schema* ([see here](https://tools.ietf.org/html/draft-zyp-json-schema-04)):
 
 ```json
 {
@@ -392,12 +392,12 @@ Local data files include data for each one of the entities returned by the Jira 
 }
 ```
 
-Example local data files can be created using the *Project Data Generator* available in [Sonatype's OSS Nexus Repository](https://oss.sonatype.org/content/repositories/snapshots/org/smartdeveloperhub/harvesters/it/frontend/it-frontend-dist/0.1.0-SNAPSHOT/it-frontend-dist-0.1.0-20160710.164045-32-generator.zip).
+Example local data files can be created using the *Project Data Generator* available in the *IT Harvester Frontend distribution* __testing-utils__ bundle [available at Sonatype's OSS Nexus Repository](https://oss.sonatype.org/content/repositories/snapshots/org/smartdeveloperhub/harvesters/it/frontend/it-frontend-dist/0.1.0-SNAPSHOT/).
 
-The generator requires Java 7 to be available in the path. Once unzipped, for example in folder 'generator', the generator can be run like this:
+The generator requires Java 7 to be available in the path. Once unzipped, for example in the current working directory, the generator can be run like this:
 
 ```bash
-./generator/bin/generator.sh <path-to-file>
+./testing-utils-0.1.0-SNAPSHOT/bin/generator.sh <path-to-file>
 ```
 
 Where `<path-to-file>` is the name of the file where the local data will be written to.
