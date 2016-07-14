@@ -392,7 +392,7 @@ Local data files include data for each one of the entities returned by the *REST
 }
 ```
 
-Example local data files can be created using the *Project Data Generator* available in the *IT Harvester Frontend distribution* __testing-utils__ bundle [available at Sonatype's OSS Nexus Repository](https://oss.sonatype.org/content/repositories/snapshots/org/smartdeveloperhub/harvesters/it/frontend/it-frontend-dist/0.1.0-SNAPSHOT/).
+Example local data files can be created using the *Project Data Generator* available in the *IT Harvester Frontend distribution* __testing-utils__ bundle [available at Sonatype's OSS Nexus Repository](https://oss.sonatype.org/content/repositories/snapshots/org/smartdeveloperhub/harvesters/it/frontend/it-frontend-dist/0.1.0-SNAPSHOT/it-frontend-dist-0.1.0-20160713.215656-35-testing-utils.zip).
 
 The generator requires Java 7 to be available in the path. Once unzipped, for example in the current working directory, the generator can be run like this:
 
