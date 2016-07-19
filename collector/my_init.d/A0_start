@@ -1,0 +1,13 @@
+#!/bin/sh
+
+cd /opt/it-harvester-backend
+
+echo Getting version $VERSION of the SDH IT Backend Distributable
+
+curl -o dist.zip https://repo.maven.apache.org/maven2/org/smartdeveloperhub/harvesters/it/backend/it-backend-dist/$VERSION/it-backend-dist-$VERSION-cli.zip
+
+unzip dist.zip -d .
+
+export JAVA_OPTS="-Xmx1024m -XX:MaxPermSize=256m"
+
+./jira-collector-$VERSION/bin/jira-collector.sh $CONFIG &

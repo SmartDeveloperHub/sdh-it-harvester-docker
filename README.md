@@ -1,15 +1,15 @@
 # SDH IT Harvester Docker
 
-Deploying and executing the __IT Harvester Frontend__ of the *Smart Developer Hub* project with Docker.
+Deploying and executing the __IT Harvester__ of the *Smart Developer Hub* project with Docker.
 
 ## Usage instructions
 
-### Building the Docker image
+### Building the Docker images
 
-The first step consists in building the image defined by `Dockerfile` in the repository's root directory:
+The first step consists in building the image for the __IT Harvester Frontend__ defined by `Dockerfile` in the repository's root directory:
 
 ```bash
-docker build -t sdh/it-harvester .
+docker build -t sdh/it-harvester-frontend .
 ```
 
 If the *IT Harvester Frontend*  is to use a local data-based backend, it will require a local data file to run. This file can be added to the image, so that it will always use the same, or it might be bound at runtime (see example in the following section).
@@ -22,7 +22,23 @@ COPY files/local-data.json $HARVESTER_HOME/data/local-data.json
 
 The first line specifies the required environment variable that points to the local data file. The second line copies the local data file from the host to its expected location within the container.
 
-### Running the container
+The first step consists in building the image for the __IT Harvester Backend (Jira Collector)__ defined by `Dockerfile` in the repository's `collector` directory:
+
+```bash
+docker build -t sdh/it-harvester-backend collector
+```
+
+The *IT Harvester Backend*  requires a couple of configuration files to run. These files can be added to the image, so that it will always use the same, or they might be bound at runtime (see example in the following section). In order to include the files as part of the image, it will be necessary to edit the `Dockerfile` configuration, and add a couple of lines:
+
+```bash
+ENV CONFIG=$HARVESTER_HOME/collector.cfg
+COPY files/collector.cfg $HARVESTER_HOME/collector.cfg
+COPY files/contributor.mails $HARVESTER_HOME/contributor.mails
+```
+
+The first line specifies the required environment variable that points to the configuration file. The second line copies the configuration file from the host to its expected location within the container. The third line copies the contributors configuration file specified in the main configuration file from the host to its expected location within the container.
+
+### Running the containers
 
 In order to run the *IT Harvester Frontend* it is necessary to define several environment variables:
 
@@ -50,11 +66,30 @@ docker run -e "HTTP_HOST=frontend.ith.smartdeveloperhub.org" \
            -e "LOCAL_DATA=/opt/it-harvester/data/local-data.json" \
            -v $(pwd)/files/local-data.json:/opt/it-harvester/data/local-data.json \
            -p 8088:8088 \
-           --name sdh-it-harvester 
-           sdh/it-harvester
+           --name sdh-it-harvester-frontend \
+           sdh/it-harvester-frontend
 ```
 
 In the example above, the external data file should be located in the `files/local-data.json` directory of the current working directory, and is made available in the container at `/opt/it-harvester/data/local-data.json`, which is exactly the path that the *IT Harvester Frontend* will use at runtime.
+
+In order to run the *IT Harvester Backend* it is necessary to define several environment variables:
+
+* __VERSION__: the version of the Jira Collector to use. It must be a stable version (*e.g.*, 0.1.0), not a snapshot one (*e.g.*, 0.1.0-SNAPSHOT). 
+
+* __CONFIG__: the path to the configuration file. This file may be directly included in the image (see previous section), or made available at runtime by mounting a host directory in the container (see example below). The configuration file specifies, among other details, the port to be used by the *Jira Collector*. This port will have to be exposed by the container. 
+
+Bearing this in mind, a container which reuses an external configuration file could be executed as follows:
+
+```bash
+docker run -e "VERSION=0.1.0" \
+           -e "CONFIG=/opt/it-harvester-backend/collector.cfg" \
+           -v $(pwd)/config:/opt/it-harvester-backend \
+           -p 8088:8088 \
+           --name sdh-it-harvester-backend \
+           sdh/it-harvester-backend
+```
+
+In the example above, the container will run version `0.1.0` of the *IT Harvester Backend*, which will use the configuration file at `/opt/it-harvester-backend/collector.cfg`. This file will be linked from the host, in particular from the `config` directory of the current working directory. The example assumes that the *IT Harvester Backend* is configured to use port `8088`, and thus this port is exposed by the container as is.
 
 ### Creating local data files
 
@@ -392,12 +427,12 @@ Local data files include data for each one of the entities returned by the *REST
 }
 ```
 
-Example local data files can be created using the *Project Data Generator* available in the *IT Harvester Frontend distribution* __testing-utils__ bundle [available at Sonatype's OSS Nexus Repository](https://oss.sonatype.org/content/repositories/snapshots/org/smartdeveloperhub/harvesters/it/frontend/it-frontend-dist/0.1.0-SNAPSHOT/it-frontend-dist-0.1.0-20160713.215656-35-testing-utils.zip).
+Example local data files can be created using the *Project Data Generator* available in the *IT Harvester Frontend distribution* __testing-utils__ bundle [available at Sonatype's OSS Nexus Repository](https://repo.maven.apache.org/maven2/org/smartdeveloperhub/harvesters/it/frontend/it-frontend-dist/0.1.0/it-frontend-dist-0.1.0-testing-utils.zip).
 
 The generator requires Java 7 to be available in the path. Once unzipped, for example in the current working directory, the generator can be run like this:
 
 ```bash
-./testing-utils-0.1.0-SNAPSHOT/bin/generator.sh <path-to-file>
+./testing-utils-0.1.0/bin/generator.sh <path-to-file>
 ```
 
 Where `<path-to-file>` is the name of the file where the local data will be written to.
