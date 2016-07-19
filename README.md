@@ -438,38 +438,39 @@ The generator requires Java 7 to be available in the path. Once unzipped, for ex
 Where `<path-to-file>` is the name of the file where the local data will be written to.
 
 
-The IT Harvester Backend configuration file it must follow the next structure:
+The IT Harvester Backend configuration file __collector.cfg__ it must follow the next structure:
 
-```collector.cfg
-
-```` Collector Version
-softwareVersion=1.0.0
-
-```` Jira Credentials
+```bash
+# Jira Credentials
 jiraUrl=www.example.jira.instance.com
-JiraUsername=jira_username
-JiraPassword=j1r4_p4ssw0rd
+JiraUsername=jira_username # Username used in jira instance
+JiraPassword=j1r4_p4ssw0rd # Password for jira user
 
-```` RabbitAMQ Configuration
-
-instance=www.host.url.com:8088
+# RabbitAMQ Configuration
 brokerHost=server.rabbit.com
 brokerPort=5672
 virtualHost=/
 exchangeName=itcollector
 
-```` Redis Server Configuration
-
+# Redis Server Configuration
 redisServer=server.redis.com
 redisPort=6379
 
+# Collector service parameters
+softwareVersion=1.0.0
+instance=www.host.url.com:8088 # For identifying Collector instance
 servletPort=8088
 servletPath=/*
+collectorPeriodicity = 60 # time in seconds for crawling
 
-collectorPeriodicity = 60 /* seconds */
-
+# File with additional contributor mails
 contributorsFile = /opt/it-harvester-backend/contributor.mails
+```
 
+The __contributor.mails__ file must contains one line for contributor with the following schema:
+```bash
+jira_nick name@domain.com
+```
 ## License
 
 SDH-IT-Harvester-Docker is distributed under the Apache License, version 2.0.
